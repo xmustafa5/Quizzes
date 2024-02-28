@@ -1,15 +1,27 @@
+<script setup>
+import q from "./data/quizes.json";
+import { ref ,watch } from "vue";
+const quizzes = ref(q);
+const search = ref('');
+
+watch(search,()=>{
+  quizzes.value = q.filter(quiz => quiz.name.toLowerCase().includes(search.value.toLowerCase()) )
+})
+
+</script>
+
 <template>
   <div class="container">
     <header>
       <h1>Quizzes</h1>
-      <input type="text" placeholder="search...." />
+      <input v-model.term="search" type="text" placeholder="search...." />
     </header>
     <div class="options-container">
-      <div class="card">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCt6BNGesM4nEEkHOiFLafHIYg8G0MS1hFDQ&usqp=CAU" alt="" />
+      <div class="card" v-for="quiz in quizzes" :key="quiz.id">
+        <img :src="quiz.image" alt="" />
         <div class="card-text">
-          <h2>Math</h2>
-          <p>15 questions</p>
+          <h2>{{ quiz.name }}</h2>
+          <p>{{ quiz.questions.length }} questions</p>
         </div>
       </div>
     </div>
@@ -52,19 +64,16 @@ header input {
   height: 190px;
   margin: 0;
 }
-.card .card-text{
+.card .card-text {
   padding: 0 5px;
 }
-.card .card-text h2{
+.card .card-text h2 {
   font-weight: bold;
 }
 
 .options-container {
- display: flex;
- flex-wrap: warp;
- margin-top: 40px;
+  display: flex;
+  flex-wrap: warp;
+  margin-top: 40px;
 }
-
-
-
 </style>
